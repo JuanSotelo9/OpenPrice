@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import pandas as pd
-import re
 
 SITIO_ID = 'MCO'
 
@@ -12,7 +11,10 @@ HEADERS = {
 }
 
 def obtener_datos(nombre):
-    
+    """
+    Consultar la pagina web de mercado libre con los items
+    que se desea consultar
+    """
     busqueda_url = nombre.lower().replace(' ', '-')
     url = f"https://listado.mercadolibre.com.co/{busqueda_url}"
     
@@ -31,7 +33,10 @@ def obtener_datos(nombre):
         return None
     
 def extraer_info(html_content):
-    
+    """
+    Extraemos la información de interes del html consultado
+    de la pagina web de mercadolibre
+    """
     if not html_content:
         return []
     
@@ -68,7 +73,9 @@ def extraer_info(html_content):
     return resultados
             
 def limpiar_estructurar(df_crudo):
-    
+    """
+    Función para limpiar la información extraida
+    """
     if df_crudo.empty:
         print("El DataFrame crudo está vacio. No hay datos para limpiar.")
         return pd.DataFrame()
@@ -88,18 +95,3 @@ def limpiar_estructurar(df_crudo):
     
     return df_final
     
-producto = 'Raspberry Pi 4'
-html = obtener_datos(producto)
-datos = extraer_info(html)
-df = limpiar_estructurar(pd.DataFrame(datos))
-
-print("\n--- Resultados Crudos (Primeros 3) ---")
-if not df.empty:
-    for index, row in df.head(3).iterrows():
-        print(f"Nombre: {row['Nombre']}")
-        # Recuerda que la columna ahora se llama 'Precio (COP)'
-        print(f"Precio: {row['Precio (COP)']:,}") 
-        print(f"URL: {row['URL']}")
-        print("-" * 20)
-else:
-    print("No se pudieron obtener o extraer datos.")
