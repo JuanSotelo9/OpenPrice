@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import time
-import pandas as pd
 
 SITIO_ID = 'MCO'
 
@@ -72,26 +71,4 @@ def extraer_info(html_content):
     
     return resultados
             
-def limpiar_estructurar(df_crudo):
-    """
-    Función para limpiar la información extraida
-    """
-    if df_crudo.empty:
-        print("El DataFrame crudo está vacio. No hay datos para limpiar.")
-        return pd.DataFrame()
-    
-    df_limpio = df_crudo.copy()
-    
-    df_limpio['Precio_Limpio'] = df_limpio['Precio_Texto_Crudo'].apply(str).str.replace(r'[^\d]', '', regex=True)
-    
-    df_limpio['Precio_Numerico'] = pd.to_numeric(df_limpio['Precio_Limpio'], errors='coerce')
-    
-    df_limpio = df_limpio.dropna(subset=['Precio_Numerico'])
-    df_limpio = df_limpio[df_limpio['Precio_Numerico'] > 0]
-    
-    df_final = df_limpio[['Nombre', 'Precio_Numerico', 'URL']].rename(
-        columns={'Precio_Numerico': 'Precio (COP)'}
-    )
-    
-    return df_final
     
