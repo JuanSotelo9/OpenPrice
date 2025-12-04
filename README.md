@@ -53,6 +53,7 @@ pip install -r requirements.txt
 ### Estructura del Proyecto
 La aplicación mantiene una estructura modular donde la lógica de negocio se separa de la interfaz de usuario para facilitar el mantenimiento.
 
+```text
 OpenPrice/
 ├── requirements.txt    # Define las dependencias de Python
 ├── src/                # Contiene toda la lógica de Python y el servidor web
@@ -63,6 +64,40 @@ OpenPrice/
 │   └── main.py         # Punto de entrada para la versión CLI
 ├── templates/          # Plantillas HTML de Flask (index.html, results.html)
 ├── static/             # Archivos estáticos: CSS, JS y la imagen de salida (reporte_comparativo.png)
-└── venv/               # Entorno virtual de Python
+```
 
+##  Uso de la aplicación
+OpenPrice puede ejecutarse en dos modos distintos: CLI para la consola, o Web para el navegador.
 
+### 1. Modo Línea de Comandos (CLI)
+La versión CLI es ideal para ejecuciones rápidas y automatizadas.
+
+#### Comando de Ejecución:
+```text
+python src/main.py
+```
+
+#### Entrada
+Producto a consultar
+
+#### Salida
+* El reporte tabular con las métricas y el Top 10 se imprime en la consola.
+* Se genera el archivo de imagen reporte_comparativo.png en el directorio raíz del proyecto.
+
+### 2. Modo Web
+La versión web ofrece una interfaz gráfica y visualiza los resultados en una página web.
+
+#### Iniciar el servidor:
+```text
+python src/app.py
+```
+
+El servidor se iniciará y mostrará la URL de acceso: http://127.0.0.1:5000.
+
+#### Interacción
+1. Abre la URL indicada en tu navegador.
+2. Introduce el producto a buscar en el formulario de la página de inicio.
+3. Haz clic en "Comparar Precios".
+
+#### Salida:
+El navegador muestra la página de resultados con el resumen de métricas, el gráfico comparativo y la tabla detallada del Top 10, todo con un diseño limpio.
