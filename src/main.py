@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 import requests
 from scraper import obtener_datos, extraer_info
 from analizador import limpiar_estructurar, obtener_top, calcular_metricas
@@ -46,7 +47,8 @@ def ejecutar_openprice_cli():
         reporte_tabular = generar_reporte_tabular(df_top, metricas, busqueda)
         print(reporte_tabular)
 
-        generar_grafico_comparativo(df_top, busqueda)
+        ruta_imagen_cli = os.path.join(os.getcwd(), 'reporte_comparativo.png')
+        generar_grafico_comparativo(df_top, busqueda, ruta_imagen_cli)
         print("\n Proceso completado. El reporte visual está en 'reporte_comparativo.png'")
 
     except requests.exceptions.HTTPError as e:

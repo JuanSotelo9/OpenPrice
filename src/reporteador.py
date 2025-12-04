@@ -39,17 +39,17 @@ def generar_reporte_tabular(df_top: pd.DataFrame, metricas: dict, busqueda: str)
     return reporte
 
 
-def generar_grafico_comparativo(df_top: pd.DataFrame, busqueda: str):
+def generar_grafico_comparativo(df_top: pd.DataFrame, busqueda: str, ruta_destino: str):
     """
-    Genera un gráfico de barras comparando los precios del Top 10 y lo guarda.
+    Genera un gráfico de barras comparando los precios del Top.
     """
     if df_top.empty:
-        print("Advertencia: No hay datos para generar el gráfico.")
-        return
+        return False
 
     precios = df_top['Precio (COP)']
     
-    nombres_cortos = [name[:30] + '...' if len(name) > 30 else name for name in df_top['Nombre']]
+    nombres_cortos = [textwrap.shorten(name, width=30, placeholder='...') 
+                      for name in df_top['Nombre']]
     
     plt.figure(figsize=(12, 6))
     
@@ -65,5 +65,8 @@ def generar_grafico_comparativo(df_top: pd.DataFrame, busqueda: str):
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.tight_layout()
     
-    ruta_imagen = os.path.join(os.getcwd(), 'reporte_comparativo.png')
-    plt.savefig(ruta_imagen)
+    plt.savefig(ruta_destino)
+    
+    plt.close()
+    
+    return True

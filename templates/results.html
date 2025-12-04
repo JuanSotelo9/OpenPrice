@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de OpenPrice</title>
+    <!-- Incluye Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Estilos para que la tabla generada por Pandas se vea bien */
+        .dataframe-container table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 1rem; 
+            font-size: 0.875rem; /* sm */
+        }
+        .dataframe-container th, .dataframe-container td { 
+            border: 1px solid #e5e7eb; /* gray-200 */
+            padding: 0.75rem; 
+            text-align: left; 
+            white-space: nowrap; /* Evita que las celdas se rompan innecesariamente */
+        }
+        .dataframe-container th { 
+            background-color: #FEF3C7; /* yellow-100 */
+            font-weight: 600;
+        }
+        .dataframe-container tr:nth-child(even) {
+            background-color: #f9fafb; /* gray-50 */
+        }
+        /* Responsividad para la tabla en móviles */
+        .dataframe-container {
+            overflow-x: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen py-10">
+    <div class="container mx-auto px-4 max-w-6xl">
+
+        <header class="mb-8">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl text-yellow-600 font-bold">💰</span>
+                <h1 class="text-3xl font-extrabold text-gray-800">Reporte OpenPrice</h1>
+            </div>
+            <p class="mt-2 text-gray-600">
+                Análisis completado para: <strong class="text-yellow-700">{{ busqueda }}</strong>
+            </p>
+        </header>
+
+        {% if error %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">🚨 Error en la Búsqueda:</strong>
+                <span class="block sm:inline">{{ error }}</span>
+            </div>
+        {% else %}
+            
+            <!-- SECCIÓN DE MÉTRICAS -->
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">📊 Resumen de Precios</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                
+                {% set metrics_display = [
+                    ('Precio Mínimo', metricas.Minimo, 'bg-green-100 text-green-700'),
+                    ('Precio Máximo', metricas.Maximo, 'bg-red-100 text-red-700'),
+                    ('Precio Promedio', metricas.Promedio, 'bg-blue-100 text-blue-700')
+                ] %}
+
+                {% for title, value, color_class in metrics_display %}
+                <div class="p-5 rounded-xl shadow-lg {{ color_class }} transition duration-300 hover:shadow-xl">
+                    <p class="text-sm font-medium">{{ title }}</p>
+                    <p class="text-3xl font-bold mt-1">${{ "{:,.0f}".format(value) }}</p>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <!-- SECCIÓN DE GRÁFICO -->
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">📈 Visualización Comparativa (Top 10)</h2>
+            <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+                <!-- La imagen del gráfico generado por Matplotlib -->
+                <img 
+                    src="{{ url_for('static', filename=imagen_reporte) }}" 
+                    alt="Gráfico de Comparación de Precios"
+                    class="rounded-lg w-full h-auto"
+                >
+            </div>
+
+            <!-- SECCIÓN DE TABLA -->
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">📦 Detalle Completo del Top 10</h2>
+            <div class="bg-white p-4 rounded-xl shadow-lg dataframe-container">
+                <!-- df_html contiene el código HTML de la tabla generado por Pandas -->
+                {{ df_html | safe }} 
+            </div>
+
+        {% endif %}
+
+        <footer class="mt-8 text-center">
+            <a 
+                href="{{ url_for('index') }}" 
+                class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 transition duration-300 shadow-md"
+            >
+                ⬅️ Realizar otra búsqueda
+            </a>
+        </footer>
+    </div>
+</body>
+</html>
