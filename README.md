@@ -36,3 +36,33 @@ Todas las dependencias:
 * `matplotlib`
 * `Flask`
 
+### Instalación de Dependencias
+
+Se recomienda encarecidamente usar un entorno virtual (venv) para aislar las dependencias del sistema:
+
+#### 1. Crear el entorno virtual
+python3 -m venv venv
+
+#### 2. Activar el entorno
+source venv/bin/activate  # En Linux/macOS
+.\venv\Scripts\activate # En Windows PowerShell
+
+#### 3. Instalar dependencias
+pip install -r requirements.txt
+
+### Estructura del Proyecto
+La aplicación mantiene una estructura modular donde la lógica de negocio se separa de la interfaz de usuario para facilitar el mantenimiento.
+
+OpenPrice/
+├── requirements.txt    # Define las dependencias de Python
+├── src/                # Contiene toda la lógica de Python y el servidor web
+│   ├── app.py          # Aplicación Flask (interfaz web)
+│   ├── scraper.py      # Módulo de scraping (extracción de datos)
+│   ├── analizador.py   # Módulo de limpieza y cálculo de métricas
+│   ├── reporteador.py  # Módulo para generar el gráfico
+│   └── main.py         # Punto de entrada para la versión CLI
+├── templates/          # Plantillas HTML de Flask (index.html, results.html)
+├── static/             # Archivos estáticos: CSS, JS y la imagen de salida (reporte_comparativo.png)
+└── venv/               # Entorno virtual de Python
+
+
